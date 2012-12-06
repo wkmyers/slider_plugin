@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <script type= "text/javascript" src="Scripts/jquery-1.4.4.min.js"></script>
+        <script type= "text/javascript" src="slider.js"></script>
+        <script type= "text/javascript">
+
+            var text = ["Sample text 1", "Sample text 2", "Sample text 3"];
+
+            $(document).ready(function () {
+
+                //.slider(delay between slides, duration of slide, top and left padding of slide text, array of text);
+
+                $('#destDiv').slider('assign', 2000, 600, 20, text);
+                $('#destDiv').slider('apply');
+
+            });
+
+        </script>
+    </head>
+    <body>
+        <div id="destDiv" style = "position: absolute; height:100px; width:600px; background-color: grey; color: white">
+        </div>
+    </body>
+</html>

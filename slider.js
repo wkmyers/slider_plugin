@@ -1,53 +1,52 @@
-	//add additional quotes in sets of 2
-		 var quotesArray = new Array();
-		 quotesArray[0] = "\"Jodi is so great.  She just floats my boat, in a groovy kinda way.\"";
-		 quotesArray[1] = "\"Her music transcends conciousness.  It's digs deep down and grabs my soul.  And then tickles it.\"";
-		 quotesArray[2] = "\"Listing to Jodi sing is better than a hot shower and a cold beer.\"";
-		 quotesArray[3] = "Have something great to say about Jodi or her music? Do tell in the <span style = \" font-weight: bold; \">comments</span> section!";
+///////////////////////////////////////////////////////////////////
+///////////// THIS PLUGIN DEVELOPED BY will myers /////////////////
+///////////////////////////////////////////////////////////////////
 
+var slidervars = {};
 
-        (function($) {
-          $.fn.slider = function startSlide(initElementID,sliderDelay) {
+(function ($) {
 
-		     if ((quotesCounter + 1) > quotesArray.length) quotesCounter = 0;
-		     $('#scrollitem0').html(quotesArray[quotesCounter]);
-		     $('#scrollitem1').html(quotesArray[quotesCounter + 1]);
+    var methods = {
+        assign: function (val1, val2, val3, val4) {
+  
+            slidervars.time = val1;
+            slidervars.duration = val2;
+            slidervars.padding = val3;
+            slidervars.array = val4;
+            slidervars.counter = 0;
+            slidervars.amount = $(this).width()+slidervars.padding;
 
-		     $('#scrollitem0').animate(
-					{
-					    left: '+=600'
-					}, {
-					    complete: function () {
-					        $('#scrollitem0').delay(sliderDelay).animate(
-								{
-								    left: '+=600'
-								}, {
-								    complete: function () {
+            $(this).css({ 'overflow': 'hidden' });
+            $(this).append($("<div>").attr('id', 'slideItem').css({ 'display': 'block', 'position': 'absolute', 'left': (slidervars.amount - (slidervars.amount * 2)) + 'px', 'top': slidervars.padding +'px', 'white-space': 'nowrap' }));
 
-								        $('#scrollitem1').animate(
-												{
-												    left: '+=600'
-												}, {
-												    complete: function () {
-												        $('#scrollitem1').delay(sliderDelay).animate(
-																{
-																    left: '+=600'
-																}, {
-																    complete: function () {
+        },
+        apply: function () {
+            if ((slidervars.counter + 1) > slidervars.array.length) slidervars.counter = 0;
+            $('#slideItem').html(slidervars.array[slidervars.counter]);
+            $('#slideItem').animate(
+			    {
+			        left: slidervars.padding
+			    }, slidervars.duration, function () {
+			        $('#slideItem').delay(slidervars.time).animate(
+						    {
+						        left: (slidervars.amount + 'px')
+						    }, slidervars.duration, function () {
+						        $('#slideItem').css('left', (slidervars.amount - (slidervars.amount * 2)) + 'px');
+						        slidervars.counter += 1;
+						        $(this).slider('apply', slidervars.time);
+						    });
+			    });
+        }
+    };
 
-																        $('#scrollitem0').css('left', '-580px');
-																        $('#scrollitem1').css('left', '-580px');
-																        quotesCounter += 2;
-																        startSlide(initElementID,sliderDelay); //repeat slider
-
-																    } 
-																});
-												    } 
-												});
-								    } 
-								});
-					    } 
-					});
-           
-          };
-        })(jQuery);
+    $.fn.slider = function (methodOrOptions) {
+        if (methods[methodOrOptions]) {
+            return methods[methodOrOptions].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {
+            // Default to "init"
+            return methods.init.apply(this, arguments);
+        } else {
+            console.log('Method ' + methodOrOptions + ' does not exist on jQuery.tooltip');
+        }
+    };
+})(jQuery);
